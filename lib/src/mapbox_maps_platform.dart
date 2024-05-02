@@ -159,6 +159,22 @@ class _MapboxMapsPlatform {
       return new Future.error(e);
     }
   }
+
+  Future<dynamic> enableTelemetry(bool enable) async {
+    try {
+      return _channel.invokeMethod('map#enableTelemetry', <String, dynamic>{'enable': enable});
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<bool?> telemetryEnabled() async {
+    try {
+      return _channel.invokeMethod<bool>('map#telemetryEnabled');
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
 }
 
 /// A registry to hold suffixes for Channels.

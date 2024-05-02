@@ -26,6 +26,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.plugin.attribution.attribution
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -187,9 +188,31 @@ class MapboxMapController(
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
       "map#changeMaxFps" -> {
-        val fps = call.argument<Int>("fps")!!
-        mapView.setMaximumFps(fps);
+        if(mapView != null){
+          val fps = call.argument<Int>("fps")!!
+          mapView?.setMaximumFps(fps);
+          result.success(null)
+        }else{
+          result.error("View not initialized.",null,null)
+        }
+      }
+      "map#telemetryEnabled" -> {
+        if(mapView != null){
+          val telemetry = mapView!!.attribution.getMapAttributionDelegate().telemetry()
+          result.success(telemetry.getUserTelemetryRequestState())
+        }else{
+          result.error("View not initialized.",null,null)
+        }
+      }
+      "map#enableTelemetry" -> {
+        if(mapView != null){
+        val enable = call.argument<Boolean>("enable")!!
+        val telemetry = mapView!!.attribution.getMapAttributionDelegate().telemetry()
+        telemetry.userTelemetryRequestState = enable
         result.success(null)
+        }else{
+          result.error("View not initialized.",null,null)
+        }
       }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)

@@ -109,6 +109,15 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         switch methodCall.method {
+        case "map#enableTelemetry":
+            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+            guard let newState = arguments["enable"] as? Bool else { return }
+            // set new telemetry state
+            UserDefaults.standard.set(newState, forKey: "MGLMapboxMetricsEnabled")
+            result(nil)
+        case "map#telemetryEnabled":
+            // read telemetry state
+            result(UserDefaults.standard.bool(forKey: "MGLMapboxMetricsEnabled"))
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
