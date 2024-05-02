@@ -620,6 +620,15 @@ class MapboxMap extends ChangeNotifier {
   @experimental
   Future<void> setSnapshotLegacyMode(bool enable) =>
       _mapInterface.setSnapshotLegacyMode(enable);
+
+  Future<void> setMaxFps(int fps) async {
+    if (Platform.isAndroid) {
+      return _mapboxMapsPlatform.setMaxFps(fps);
+    }
+    // IOS is currently not supported
+    return;
+  }
+
 }
 
 class _GestureListener extends GestureListener {
