@@ -457,6 +457,14 @@ class MapboxMap extends ChangeNotifier {
   /// Returns a snapshot of the map.
   /// The snapshot is taken from the current state of the map.
   Future<Uint8List> snapshot() => _mapboxMapsPlatform.snapshot();
+
+  Future<void> setMaxFps(int fps) async {
+    if (Platform.isAndroid) {
+      return _mapboxMapsPlatform.setMaxFps(fps);
+    }
+    // IOS is currently not supported
+    return;
+  }
 }
 
 class _GestureListener extends GestureListener {

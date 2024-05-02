@@ -225,6 +225,7 @@ class GeoJsonSource extends Source {
 
   /// Update this GeojsonSource with a URL to a GeoJSON file, or inline GeoJSON.
   Future<void>? updateGeoJSON(String geoJson) async {
+        _data = geoJson;
     return _style?.setStyleSourceProperty(id, "data", geoJson);
   }
 

@@ -186,6 +186,11 @@ class MapboxMapController(
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
+      "map#changeMaxFps" -> {
+        val fps = call.argument<Int>("fps")!!
+        mapView.setMaximumFps(fps);
+        result.success(null)
+      }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)
       }

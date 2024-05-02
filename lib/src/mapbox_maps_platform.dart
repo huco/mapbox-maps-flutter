@@ -151,6 +151,14 @@ class _MapboxMapsPlatform {
       return new Future.error(e);
     }
   }
+
+  Future<dynamic> setMaxFps(int fps) async {
+    try {
+      return _channel.invokeMethod('map#changeMaxFps', <String, dynamic>{'fps': fps});
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
 }
 
 /// A registry to hold suffixes for Channels.
