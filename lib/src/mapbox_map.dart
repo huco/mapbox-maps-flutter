@@ -465,6 +465,13 @@ class MapboxMap extends ChangeNotifier {
     // IOS is currently not supported
     return;
   }
+
+    /// Enable/disable telemetry service.
+  Future<void> enableTelemetry(bool enabled) => _mapboxMapsPlatform.enableTelemetry(enabled);
+
+  /// Returns true if telemetry service is enabled, false otherwise.
+  Future<bool?> telemetryEnabled() => _mapboxMapsPlatform.telemetryEnabled();
+
 }
 
 class _GestureListener extends GestureListener {
