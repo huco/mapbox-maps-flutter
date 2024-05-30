@@ -98,7 +98,7 @@ class _MapboxMapsPlatform {
     }
   }
 
-  void dispose() async {
+  Future<void> dispose() async {
     await _channel.invokeMethod('platform#releaseMethodChannels');
 
     _channel.setMethodCallHandler(null);
