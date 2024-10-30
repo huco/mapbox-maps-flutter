@@ -171,12 +171,10 @@ class MapWidget extends StatefulWidget {
 
 class _MapWidgetState extends State<MapWidget> {
   late final _MapboxMapsPlatform _mapboxMapsPlatform =
-      _MapboxMapsPlatform(binaryMessenger: _binaryMessenger);
+      _MapboxMapsPlatform.instance(_suffix);
   final int _suffix = _suffixesRegistry.getSuffix();
-  late final BinaryMessenger _binaryMessenger =
-      ProxyBinaryMessenger(suffix: _suffix.toString());
   late final _MapEvents _events;
-
+  bool _platformViewCreated = false;
   MapboxMap? mapboxMap;
 
   @override
@@ -186,8 +184,8 @@ class _MapWidgetState extends State<MapWidget> {
       'cameraOptions': widget.cameraOptions,
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
-      'channelSuffix': _suffix,
-      'mapboxPluginVersion': '2.3.0',
+      'channelSuffix': _mapboxMapsPlatform.channelSuffix,
+      'mapboxPluginVersion': '2.4.0-beta.1',
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
     };
 
@@ -199,7 +197,9 @@ class _MapWidgetState extends State<MapWidget> {
   void initState() {
     super.initState();
 
-    _events = _MapEvents(binaryMessenger: _binaryMessenger);
+    _events = _MapEvents(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        channelSuffix: _suffix.toString());
     _updateEventListeners();
   }
 
@@ -217,7 +217,10 @@ class _MapWidgetState extends State<MapWidget> {
     super.didUpdateWidget(oldWidget);
 
     _updateEventListeners();
-    _events.updateSubscriptions();
+
+    if (_platformViewCreated) {
+      _events.updateSubscriptions();
+    }
   }
 
   void _updateEventListeners() {
@@ -239,7 +242,7 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    final MapboxMap controller = MapboxMap(
+    final MapboxMap controller = MapboxMap._(
       mapboxMapsPlatform: _mapboxMapsPlatform,
       onMapTapListener: widget.onTapListener,
       onMapLongTapListener: widget.onLongTapListener,
@@ -249,5 +252,8 @@ class _MapWidgetState extends State<MapWidget> {
       widget.onMapCreated!(controller);
     }
     mapboxMap = controller;
+
+    _events.updateSubscriptions();
+    _platformViewCreated = true;
   }
 }

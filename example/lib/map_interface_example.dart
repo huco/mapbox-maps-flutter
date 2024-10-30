@@ -4,26 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class MapInterfacePage extends ExamplePage {
-  MapInterfacePage() : super(const Icon(Icons.map), 'MapInterface');
+class MapInterfaceExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'MapInterface';
+  @override
+  final String? subtitle = null;
 
   @override
-  Widget build(BuildContext context) {
-    return const MapInterfacePageBody();
-  }
+  State<StatefulWidget> createState() => MapInterfaceExampleState();
 }
 
-class MapInterfacePageBody extends StatefulWidget {
-  const MapInterfacePageBody();
-
-  @override
-  State<StatefulWidget> createState() => MapInterfacePageBodyState();
-}
-
-class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
-  MapInterfacePageBodyState();
+class MapInterfaceExampleState extends State<MapInterfaceExample> {
+  MapInterfaceExampleState();
 
   MapboxMap? mapboxMap;
 
@@ -197,39 +193,6 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
     );
   }
 
-  Widget _setDebugOptions() {
-    return TextButton(
-        child: Text('setDebugOptions'),
-        onPressed: () {
-          if (showTileBorders == false) {
-            mapboxMap?.setDebugOptions([MapWidgetDebugOptions.tileBorders]);
-          } else {
-            mapboxMap?.setDebugOptions([]);
-          }
-          showTileBorders = !showTileBorders;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("showTileBorders: $showTileBorders"),
-            backgroundColor: Theme.of(context).primaryColor,
-            duration: Duration(seconds: 2),
-          ));
-        });
-  }
-
-  Widget _getDebugOptions() {
-    return TextButton(
-      child: Text('getDebugOptions'),
-      onPressed: () {
-        mapboxMap?.getDebugOptions().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "getDebugOptions: ${value.firstOrNull?.option.name ?? "none"}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
-      },
-    );
-  }
-
   Widget _getMapOptions() {
     return TextButton(
       child: Text('getMapOptions'),
@@ -328,8 +291,6 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
         _getSize(),
         _getMapOptions(),
         _getResourceOptions(),
-        _setDebugOptions(),
-        _getDebugOptions(),
         _reduceMemoryUse(),
         _getGestureInProgress(),
         _setGestureInProgress(),
