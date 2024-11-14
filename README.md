@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter SDK
 
-The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.8.0-beta.1). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.8.0). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -48,47 +48,32 @@ The Maps Flutter SDK is compatible with applications:
 
 - Deployed on iOS 12 or higher
 - Built using the Android SDK 21 or higher
-- Built using the Dart SDK 3.0.0 or higher
+- Built using the Flutter SDK 3.22.3/Dart SDK 3.4.4 or higher
 
 ## Installation
 
 ### Configure credentials
-To run the Maps Flutter SDK you will need to configure the Mapbox Access Tokens. 
-Read more about access tokens and public/secret scopes in the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#step-4-configure-your-public-token) docs.
+To run the Maps Flutter SDK you will need to configure the Mapbox Access Token.
+Read more about access tokens in the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#step-4-configure-your-public-token) docs.
 
-#### Secret token
-To access platform SDKs you will need to create a secret access token with the `Downloads:Read` scope and then:
- - to download the Android SDK add the token configuration to `~/.gradle/gradle.properties` : 
-```
-  SDK_REGISTRY_TOKEN=YOUR_SECRET_MAPBOX_ACCESS_TOKEN
-```
- - to download the iOS SDK add the token configuration to `~/.netrc` :
-```
-  machine api.mapbox.com
-  login mapbox
-  password YOUR_SECRET_MAPBOX_ACCESS_TOKEN
-```
-
-To learn more about configuring your secret tokens for iOS, please see step 3 of the [configure credentials section](https://docs.mapbox.com/ios/maps/guides/install/#step-3-configure-your-secret-token) of the iOS Installation Guide.
-
-#### Public token
+#### Access token
 You can set the access token for Mapbox Maps Flutter SDK(as well as for every Mapbox SDK) via `MapboxOptions`:
 ```
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
 
-It's a good practice to retrieve access tokens from some external source.
+It's a good practice to retrieve the access token from some external source.
 
 You can pass access token via the command line arguments when either building : 
 
 ```
-flutter build <platform> --dart-define PUBLIC_ACCESS_TOKEN=...
+flutter build <platform> --dart-define ACCESS_TOKEN=...
 ```
 
 or running the application : 
 
 ```
-flutter run --dart-define PUBLIC_ACCESS_TOKEN=...
+flutter run --dart-define ACCESS_TOKEN=...
 ```
 
 You can also persist token in launch.json : 
@@ -97,7 +82,7 @@ You can also persist token in launch.json :
     {
         ...
         "args": [
-            "--dart-define", "PUBLIC_ACCESS_TOKEN=..."
+            "--dart-define", "ACCESS_TOKEN=..."
         ],
     }
 ]
@@ -113,7 +98,7 @@ To use the Maps Flutter SDK add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^2.4.0-beta.1
+  mapbox_maps_flutter: ^2.4.0
 ```
 
 ### Configure permissions
