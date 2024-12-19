@@ -1,7 +1,37 @@
-> [!IMPORTANT]
-> Configuring Mapbox's secret token is no longer required when installing our SDKs.
+# main
+
+### 2.5.0
+
+* Mark `ClipLayer` as stable.
+* Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
+  * Update experimental `symbolElevationReference` property on `SymbolLayer`. 
+  * Introduce `backgroundPitchAlignment` property on `BackgroundLayer`.
+  * Introduce experimental `fillZOffset` property on `FillLayer`.
+  * Introduce experimental `fillExtrusionBaseAlignment` and `fillExtrusionHeightAlignment` properties on `FillExtrusionLayer`.
+  * Mark get and set `ZOffset` methods on `PolygonAnnotationManager`, `PolylineAnnotationManager`, and `PointAnnotationManager` as experimental.
+  * Mark get and set `symbolElevationReference` methods on `PointAnnotationManager` as experimental.
+  * Mark get and set line trim methods on `PolylineAnnotationManager` as experimental.
+  * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.  
+  * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`. 
+  * Introduce `FillExtrusionBaseAlignment` and `FillExtrusionHeightAlignment`, and `BackgroundPitchAlignment` enums.
+* Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
+  ```dart
+  MapWidget(
+    viewport: CameraViewportState(
+      center: Point(coordinates: Position(-117.918976, 33.812092)),
+      zoom: 15.0,
+    ),
+  );
+  ```
+
+### 2.4.1
+
+* Fix annotation click listeners not working.
 
 ### 2.4.0
+
+> [!IMPORTANT]
+> Configuring Mapbox's secret token is no longer required when installing our SDKs.
 
 * Update Maps SDK to 11.8.0
 * Updated the minimum required Flutter SDK to version 3.22.3 and Dart to version 3.4.4. With the fix for Virtual Display hosting mode on Android in Flutter 3.22, we’ve changed the default map view hosting mode to Virtual Display composition. This update should eliminate the brief visibility of the map after it has been dismissed.

@@ -9,14 +9,17 @@ class PointAnnotationManager extends BaseAnnotationManager {
       required String channelSuffix})
       : _annotationMessenger = _PointAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
+        _channelSuffix = channelSuffix,
         super._();
 
   final _PointAnnotationMessenger _annotationMessenger;
+  final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPointAnnotationClickListener(
       OnPointAnnotationClickListener listener) {
-    OnPointAnnotationClickListener.setUp(listener, binaryMessenger: _messenger);
+    OnPointAnnotationClickListener.setUp(listener,
+        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
   /// Create a new annotation with the option.
@@ -153,6 +156,18 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries. Default value: false.
   Future<bool?> getSymbolAvoidEdges() =>
       _annotationMessenger.getSymbolAvoidEdges(id);
+
+  /// Selects the base of symbol-elevation. Default value: "ground".
+  @experimental
+  Future<void> setSymbolElevationReference(
+          SymbolElevationReference symbolElevationReference) =>
+      _annotationMessenger.setSymbolElevationReference(
+          id, symbolElevationReference);
+
+  /// Selects the base of symbol-elevation. Default value: "ground".
+  @experimental
+  Future<SymbolElevationReference?> getSymbolElevationReference() =>
+      _annotationMessenger.getSymbolElevationReference(id);
 
   /// Label placement relative to its geometry. Default value: "point".
   Future<void> setSymbolPlacement(SymbolPlacement symbolPlacement) =>
@@ -431,21 +446,13 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
       _annotationMessenger.getIconTranslateAnchor(id);
 
-  /// Selects the base of symbol-elevation. Default value: "ground".
-  Future<void> setSymbolElevationReference(
-          SymbolElevationReference symbolElevationReference) =>
-      _annotationMessenger.setSymbolElevationReference(
-          id, symbolElevationReference);
-
-  /// Selects the base of symbol-elevation. Default value: "ground".
-  Future<SymbolElevationReference?> getSymbolElevationReference() =>
-      _annotationMessenger.getSymbolElevationReference(id);
-
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  @experimental
   Future<void> setSymbolZOffset(double symbolZOffset) =>
       _annotationMessenger.setSymbolZOffset(id, symbolZOffset);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  @experimental
   Future<double?> getSymbolZOffset() =>
       _annotationMessenger.getSymbolZOffset(id);
 

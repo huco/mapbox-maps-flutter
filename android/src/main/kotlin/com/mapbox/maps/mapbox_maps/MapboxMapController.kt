@@ -26,6 +26,9 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
+import com.mapbox.maps.plugin.animation.camera
+import com.mapbox.maps.plugin.viewport.viewport
 import io.flutter.embedding.android.FlutterActivity
 import com.mapbox.maps.plugin.attribution.attribution
 import io.flutter.plugin.common.BinaryMessenger
@@ -65,6 +68,7 @@ class MapboxMapController(
   private val attributionController: AttributionController
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
+  private val viewportController: ViewportController
 
   private val eventHandler: MapboxEventHandler
 
@@ -146,6 +150,7 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
+    viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
 
     changeUserAgent(pluginVersion)
 
@@ -161,6 +166,7 @@ class MapboxMapController(
     AttributionSettingsInterface.setUp(messenger, attributionController, this.channelSuffix)
     ScaleBarSettingsInterface.setUp(messenger, scaleBarController, this.channelSuffix)
     CompassSettingsInterface.setUp(messenger, compassController, this.channelSuffix)
+    _ViewportMessenger.setUp(messenger, viewportController, this.channelSuffix)
 
     methodChannel = MethodChannel(messenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
@@ -198,6 +204,7 @@ class MapboxMapController(
     mapView = null
     mapboxMap = null
     methodChannel.setMethodCallHandler(null)
+
     StyleManager.setUp(messenger, null, channelSuffix)
     _CameraManager.setUp(messenger, null, channelSuffix)
     Projection.setUp(messenger, null, channelSuffix)
@@ -210,6 +217,7 @@ class MapboxMapController(
     CompassSettingsInterface.setUp(messenger, null, channelSuffix)
     ScaleBarSettingsInterface.setUp(messenger, null, channelSuffix)
     AttributionSettingsInterface.setUp(messenger, null, channelSuffix)
+    _ViewportMessenger.setUp(messenger, null, channelSuffix)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -273,6 +281,9 @@ class MapboxMapController(
 
           result.success(byteArray)
         }
+      }
+      "mapView#submitViewSizeHint" -> {
+        result.success(null) // no-op on this platform
       }
       else -> {
         result.notImplemented()

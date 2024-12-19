@@ -9,15 +9,17 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
       required String channelSuffix})
       : _annotationMessenger = _PolygonAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
+        _channelSuffix = channelSuffix,
         super._();
 
   final _PolygonAnnotationMessenger _annotationMessenger;
+  final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
     OnPolygonAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger);
+        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
   /// Create a new annotation with the option.
@@ -107,5 +109,14 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
   Future<FillTranslateAnchor?> getFillTranslateAnchor() =>
       _annotationMessenger.getFillTranslateAnchor(id);
+
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  @experimental
+  Future<void> setFillZOffset(double fillZOffset) =>
+      _annotationMessenger.setFillZOffset(id, fillZOffset);
+
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain. Default value: 0. Minimum value: 0.
+  @experimental
+  Future<double?> getFillZOffset() => _annotationMessenger.getFillZOffset(id);
 }
 // End of generated file.
