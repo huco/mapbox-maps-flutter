@@ -64,6 +64,7 @@ class MapboxMapController(
   private val annotationController: AnnotationController
   private val locationComponentController: LocationComponentController
   private val gestureController: GestureController
+  private val interactionsController: InteractionsController
   private val logoController: LogoController
   private val attributionController: AttributionController
   private val scaleBarController: ScaleBarController
@@ -146,6 +147,7 @@ class MapboxMapController(
     annotationController = AnnotationController(mapView)
     locationComponentController = LocationComponentController(mapView, context)
     gestureController = GestureController(mapView, context)
+    interactionsController = InteractionsController(mapboxMap, context)
     logoController = LogoController(mapView)
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
@@ -261,6 +263,14 @@ class MapboxMapController(
       }
       "gesture#remove_listeners" -> {
         gestureController.removeListeners()
+        result.success(null)
+      }
+      "interactions#add_interaction" -> {
+        interactionsController.addInteraction(messenger, channelSuffix, call)
+        result.success(null)
+      }
+      "interactions#remove_interaction" -> {
+        interactionsController.removeInteraction(call)
         result.success(null)
       }
       "platform#releaseMethodChannels" -> {
